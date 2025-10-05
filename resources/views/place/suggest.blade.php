@@ -18,8 +18,14 @@
     <h2>{{ $place }} on {{ \Carbon\Carbon::parse($date)->format('F j, Y') }}</h2>
 
     <div class="recommendation">
-        <strong>Recommended Time:</strong> {{ $suggestion['recommendation'] ?? 'N/A' }}
+    {{ $suggestion['recommendation'] ?? 'N/A' }}
     </div>
+
+    @if (!empty($suggestion['weather_summary']))
+    <div class="weather-summary">
+        <strong>Forecast:</strong> {{ $suggestion['weather_summary'] }}
+    </div>
+@endif
 
     @if (!empty($suggestion['reason']))
         <div class="reason">

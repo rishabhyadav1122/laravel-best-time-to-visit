@@ -160,9 +160,31 @@ class PlaceController extends Controller
         // Add debug suggestion
         $debug['parsed_suggestion'] = $suggestion;
 
-        // 7) Return view with suggestion and optionally debug info (dev only)
+        // 7) Build final enriched recommendation for view
+        $formattedWeather = null;
+        if (!empty($weather)) {
+            $formattedWeather = sprintf(
+                "🌤 %s — Avg: %s°C (Min: %s°C, Max: %s°C)",
+                ucfirst($weather['weather'] ?? 'Unknown'),
+                $weather['temp'] ?? '–',
+                $weather['temp_min'] ?? '–',
+                $weather['temp_max'] ?? '–',
+            );
+        }
+
+        // Ensure a clean, readable recommendation
+        $recommendationText = trim($suggestion['recommendation'] ?? '');
+        if ($recommendationText && !preg_match('/\bam\b|\bpm\b|\d/', $recommendationText)) {
+            $recommendationText = 'Best time to visit: ' . $recommendationText;
+        }
+
         $viewData = [
-            'suggestion' => $suggestion,
+            'suggestion' => [
+                'recommendation' => $recommendationText,
+                'reason' => $suggestion['reason'] ?? [],
+                'confidence' => $suggestion['confidence'] ?? 0,
+                'weather_summary' => $formattedWeather,
+            ],
             'place' => $details['name'] ?? $placeName,
             'date' => $date,
             'old_place' => $placeName,

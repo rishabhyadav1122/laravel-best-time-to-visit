@@ -187,3 +187,45 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
   opacity: 0.95;
 }
+
+
+.weather-summary {
+  margin-top: 0.75rem;
+  padding: 0.9rem;
+  border-radius: 12px;
+  background: linear-gradient(to right, rgba(147,197,253,0.15), rgba(196,181,253,0.1));
+  border: 1px solid rgba(147,197,253,0.3);
+  font-size: 0.95rem;
+  color: #dbeafe;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.weather-summary strong {
+  color: #93c5fd;
+}
+
+.weather-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.weather-tags .tag {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(147, 197, 253, 0.15);
+  border: 1px solid rgba(147, 197, 253, 0.3);
+  border-radius: 9999px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  color: #e0f2fe;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+
+.weather-tags .tag:hover {
+  transform: scale(1.05);
+  background: rgba(147, 197, 253, 0.25);
+}
+
