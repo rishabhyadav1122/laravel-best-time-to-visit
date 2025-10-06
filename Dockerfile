@@ -1,35 +1,31 @@
-# Use the official PHP image with necessary extensions
-FROM php:8.2-fpm
+# Use a base image with PHP and a web server
+FROM php:8.2-fpm-alpine
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    zip \
-    git \
-    unzip \
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the Laravel project files into the container
+COPY . /app
+
+# Install system dependencies for PHP
+RUN apk add --no-cache \
     curl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql
+    unzip \
+    zip \
+    nginx
 
 # Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-# Set working directory
-WORKDIR /var/www
-
-# Copy project files
-COPY . .
-
-# Install PHP dependencies
+# Install PHP dependencies from composer.json
 RUN composer install --no-dev --optimize-autoloader
 
-# Set Laravel permissions
-RUN chown -R www-data:www-data storage bootstrap/cache
+# Create the database file and run migrations
+# The "|| true" is used to prevent the container from failing if the migration table already exists
+RUN php artisan migrate --force || true
 
-# Expose port
+# Expose port 80 to the host machine
 EXPOSE 8000
 
-# Start Laravel
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+# Start the PHP development server
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
