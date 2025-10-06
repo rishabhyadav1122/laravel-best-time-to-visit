@@ -18,7 +18,7 @@ RUN apk add --no-cache \
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Install PHP dependencies from composer.json
-RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+RUN composer install --no-dev --optimize-autoloader
 
 # Create the database file and run migrations
 # The "|| true" is used to prevent the container from failing if the migration table already exists
